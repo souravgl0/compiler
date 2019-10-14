@@ -105,18 +105,30 @@ ScanStmt: scankeyword '(' IdentList ')' ';'
         ;
 
 IdentList: %empty
-        | ident ',' IdentList
-        | ident '[' Expr ']' ',' IdentList
-        | ident '[' Expr ']' '[' Expr ']' ',' IdentList
+        | IdentCommaList
+        ;
+
+IdentCommaList: ident
+        | ident '[' Expr ']'
+        | ident '[' Expr ']' '[' Expr ']'
+        | ident ',' IdentCommaList
+        | ident '[' Expr ']' ',' IdentCommaList
+        | ident '[' Expr ']' '[' Expr ']' ',' IdentCommaList
         ;
 
 FuncDecl: Type ident '(' ParamList ')' '{' StmtCollection '}'
         ;
 
 ParamList: %empty
-        | Type ident ',' ParamList
-        | Type ident '[' ']' ',' ParamList
-        | Type ident '[' ']' '[' ']' ',' ParamList
+        | ParamCommaList
+        ;
+
+ParamCommaList: Type ident
+        | Type ident '[' ']'
+        | Type ident '[' ']' '[' ']'
+        | Type ident ',' ParamCommaList
+        | Type ident '[' ']' ',' ParamCommaList
+        | Type ident '[' ']' '[' ']' ',' ParamCommaList
         ;
 
 ReadFileStmt: readfilekeyword '(' ident ',' Expr ')' ';'
