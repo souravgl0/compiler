@@ -1,0 +1,8 @@
+int n;
+int i;
+string val = "Its Prime";
+scan(n);
+for (i = 2; i < n; i = i + 1) {
+	if ((n % i) == 0){ val = "Its Not Prime";}
+}
+print(val);
