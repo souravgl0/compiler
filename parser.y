@@ -11,12 +11,16 @@
 Goal: Program
 
 Program: %empty
-        | StmtCollection Program
+        | StmtList Program
         | FuncDecl Program
         ;
 
 StmtCollection: %empty
-        | Stmt StmtCollection
+        | StmtList
+        ;
+
+StmtList: Stmt
+        | Stmt StmtList
         ;
 
 Stmt: VarDecl
