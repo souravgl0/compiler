@@ -1,6 +1,11 @@
 %{
+/* #include <iostream> */
+#include "scanner.hpp"
 #include <stdio.h>
+extern void yyerror(char*);
+
 %}
+
 
 %token ident OP1 OP2 Type
 %token IntConstant DoubleConstant StringConstant EOFkeyword
@@ -143,23 +148,15 @@ WriteFileStmt: writefilekeyword '(' Expr ',' Expr ')' ';'
 
 %%
 
-yyerror(char *s)
+void yyerror(char *s)
 {
         fprintf(stderr, "error: %s\n", s);
 }
 
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
         yyparse();
         printf("Parsing Over\n");
-		/* Goal:	Expr '\n'
 
-		Expr: 	Expr OP Term
-		| Term
-		;
-
-		Term:	NUMBER
-		| ID
-		; */
 }

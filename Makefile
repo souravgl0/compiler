@@ -1,14 +1,14 @@
-FILES = lex.yy.c parser.tab.c
-CC = gcc
+FILES = scanner.cpp parser.cpp
+CC = g++
 
 parser: $(FILES)
 	$(CC) $(FILES) -o parser -lfl
 
-lex.yy.c: scanner.l
+scanner.cpp: scanner.l
 	flex scanner.l
 
-parser.tab.c: parser.y
-	bison -d parser.y
+parser.cpp: parser.y
+	bison -o parser.cpp -d parser.y
 
 clean:
-	rm lex.yy.c parser.tab.c parser.tab.h
+	rm scanner.cpp scanner.hpp parser.cpp parser.hpp
