@@ -1,4 +1,4 @@
-FILES = scanner.cpp parser.cpp
+FILES = scanner.cpp parser.cpp main.cpp
 CC = g++
 
 parser: $(FILES)
@@ -7,7 +7,7 @@ parser: $(FILES)
 scanner.cpp: scanner.l
 	flex scanner.l
 
-parser.cpp: parser.y
+parser.cpp: parser.y ast.h pp.h
 	bison -o parser.cpp -d parser.y
 
 clean:
