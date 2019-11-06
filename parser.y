@@ -100,6 +100,7 @@ IfStmt: IfBlock ElseIfStmt ElseStmt {
             c->elseblk = dynamic_cast<IFBlock*>($3);
         else
             c->elseblk = NULL;
+        $$=c;
     }
 
 IfBlock: ifkeyword '(' Expr ')' '{' StmtCollection '}' {$$ = new IFBlock(dynamic_cast<Block*>($6),$3);}

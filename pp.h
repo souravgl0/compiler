@@ -3,9 +3,13 @@
 #include "ast.h"
 #endif
 #include <bits/stdc++.h>
+#define PRINT_TABS for(int i=0;i<tabs;i++)cout<<"\t";
 using namespace std ;
 class ppV: public ASTvisitor
 {
+public:
+    int tabs = 0;
+    bool semicolon = true;
     virtual void visit(IntLiteral& node)
     {
         cout<<node.value;
@@ -42,8 +46,17 @@ class ppV: public ASTvisitor
     virtual void visit(Identifier& node)
     {
         cout<<node.name;
-        if(node.isArray())cout<<"["<<node.size1<<"]";
-        if(node.is2DArray())cout<<"["<<node.size2<<"]";
+        if(node.isArray())
+        {   cout<<"[";
+            node.size1->accept(*this);
+            cout<<"]";
+        }
+        if(node.is2DArray())
+        {
+            cout<<"[";
+            node.size2->accept(*this);
+            cout<<"]";
+        }
     }
     virtual void visit(ExprList& node)
     {
@@ -150,8 +163,9 @@ class ppV: public ASTvisitor
         {
             if(aa!=NULL)
             {
-                aa->accept(*this);
-                cout<<";"<<endl;
+                PRINT_TABS aa->accept(*this);
+                if(semicolon)cout<<";"<<endl;
+                else semicolon=true;
             }
             else{
                 cout<<"A statement is NULL;"<<endl;
@@ -166,16 +180,27 @@ class ppV: public ASTvisitor
         node.expr2->accept(*this);
         cout<<";";
         node.expr3->accept(*this);
-        cout<<")\n{\n";
+        cout<<")\n";
+
+        PRINT_TABS cout<<"{\n";
+        tabs+=1;
         node.body->accept(*this);
-        cout<<"}\n";
+        tabs-=1;
+        PRINT_TABS cout<<"}\n";
+        semicolon=false;
     }
     virtual void visit(WhileLoop& node)
     {
         cout<<"while(";
         node.cond->accept(*this);
+        cout<<")\n";
+
+        PRINT_TABS cout<<"{";
+        tabs+=1;
         node.body->accept(*this);
-        cout<<")";
+        tabs-=1;
+        PRINT_TABS cout<<"}";
+        semicolon=false;
     }
     virtual void visit(IFBlock& node)
     {
@@ -187,27 +212,31 @@ class ppV: public ASTvisitor
             cond->accept(*this);
             cout<<")";
         }
-        cout<<"\n{\n";
+        cout<<"\n";
+        PRINT_TABS cout<<"{\n";
+        tabs+=1;
         body->accept(*this);
-        cout<<"}\n";
+        tabs-=1;
+        PRINT_TABS cout<<"}\n";
     }
     virtual void visit(Conditional& node)
     {
         IFBlock* ifblk=node.ifblk;
-    	vector<IFBlock*> elseifblks=node.elseifblks;
+    	deque<IFBlock*> elseifblks=node.elseifblks;
     	IFBlock* elseblk=node.elseblk;
 
         ifblk->accept(*this);
         for(auto blk:elseifblks)
         {
-            cout<<"else ";
+            PRINT_TABS cout<<"else ";
             blk->accept(*this);
         }
         if(elseblk!=NULL)
         {
-            cout<<"else";
+            PRINT_TABS cout<<"else";
             elseblk->accept(*this);
         }
+        semicolon=false;
     }
     virtual void visit(FunDecl& node)
     {
@@ -216,13 +245,12 @@ class ppV: public ASTvisitor
         ParamList* params=node.params;
         Block* body=node.body;
 
-        cout<<type<<" ";
-        id->accept(*this);
-        cout<<"(";
-        params->accept(*this);
-        cout<<")\n{\n";
+        PRINT_TABS cout<<type<<" ";  id->accept(*this); cout<<"("; params->accept(*this); cout<<")\n";
+        PRINT_TABS cout<<"{\n";
+        tabs+=1;
         body->accept(*this);
-        cout<<"}\n";
+        tabs-=1;
+        PRINT_TABS cout<<"}\n";
     }
     virtual void visit(ParamList& node)
     {

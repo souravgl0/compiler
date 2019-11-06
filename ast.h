@@ -81,6 +81,7 @@ class IntLiteral : public Constant
 		int value;
 		IntLiteral(int v)
 		{
+			// cout<<v<<endl;
 			value = v;
         }
 		virtual void accept(ASTvisitor& V)
@@ -441,12 +442,12 @@ class Conditional : public ASTnode
 {
 	public:
 	IFBlock* ifblk;
-	vector<IFBlock*> elseifblks;
+	deque<IFBlock*> elseifblks;
 	IFBlock* elseblk;
 
 	void add(IFBlock* i)
 	{
-		elseifblks.push_back(i);
+		elseifblks.push_front(i);
 	}
 	virtual void accept(ASTvisitor& V)
 	{
