@@ -14,6 +14,7 @@
 [ \t\n] 		              	{ /* eat white spaces */  }
 (if)                            { return ifkeyword;}
 (else)                          { return elsekeyword;}
+(elseif)                          { return elseifkeyword;}
 (while)                         { return whilekeyword;}
 (for)                           { return forkeyword;}
 (break)                         { return breakkeyword;}

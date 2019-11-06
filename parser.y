@@ -33,7 +33,7 @@ extern void yyerror(char*);
 %token <doubleVal>DoubleConstant
 %token <stringVal>StringConstant
 %token EOFkeyword
-%token ifkeyword elsekeyword whilekeyword forkeyword breakkeyword
+%token ifkeyword elseifkeyword elsekeyword whilekeyword forkeyword breakkeyword
 %token returnkeyword printkeyword scankeyword readfilekeyword writefilekeyword
 %%
 
@@ -110,7 +110,7 @@ ElseIfStmt:  %empty {$$ = new Conditional();}
         | ElseIfBlock ElseIfStmt {Conditional* c = dynamic_cast<Conditional*>($2); IFBlock* i = dynamic_cast<IFBlock*>($1);c->add(i);$$=c;}
         ;
 
-ElseIfBlock: elsekeyword ifkeyword '(' Expr')' '{' StmtCollection '}' {$$ = new IFBlock(dynamic_cast<Block*>($7),$4);}
+ElseIfBlock: elseifkeyword '(' Expr')' '{' StmtCollection '}' {$$ = new IFBlock(dynamic_cast<Block*>($6),$3);}
         ;
 
 ElseStmt: %empty {$$ = NULL;}
